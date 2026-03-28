@@ -1,22 +1,24 @@
 package com.banco.model;
 
+import com.banco.exceptions.SaldoInsuficienteException;
+import com.banco.exceptions.SenhaInvalidaException;
+
 public class Conta {
 
     private int numeroConta;
     private String agencia;
-    protected double saldo; // protected para subclasses (ContaPf/ContaPj) acessarem
+    protected double saldo;
     private String senha;
-    private Cliente titular; // referência ao dono da conta
+    private Cliente titular;
 
     public Conta(int numeroConta, String agencia, String senha, Cliente titular) {
         this.numeroConta = numeroConta;
         this.agencia = agencia;
         this.senha = senha;
         this.titular = titular;
-        this.saldo = 0.0; // saldo sempre começa em zero
+        this.saldo = 0.0;
     }
 
-    // saldo NÃO tem setter — só muda via depositar() e sacar()
     public double getSaldo() { return saldo; }
 
     public int getNumeroConta() { return numeroConta; }
@@ -31,35 +33,20 @@ public class Conta {
     public Cliente getTitular() { return titular; }
     public void setTitular(Cliente titular) { this.titular = titular; }
 
-    public boolean autenticar(String senhaInformada) {
-        return this.senha.equals(senhaInformada);
+    public void autenticar(String senhaInformada) {
+        if (!this.senha.equals(senhaInformada)) throw new SenhaInvalidaException();
     }
 
+    // model só executa a operação — sem println, sem validação de negócio
     public void depositar(double valor) {
-        if (valor <= 0) {
-            System.out.println("Valor de depósito inválido.");
-            return;
-        }
+        if (valor <= 0) throw new IllegalArgumentException("Valor de depósito deve ser positivo.");
         this.saldo += valor;
-        System.out.printf("Depósito de R$ %.2f realizado. Saldo atual: R$ %.2f%n", valor, saldo);
     }
 
-    public boolean sacar(double valor) {
-        if (valor <= 0) {
-            System.out.println("Valor de saque inválido.");
-            return false;
-        }
-        if (this.saldo < valor) {
-            System.out.println("Saldo insuficiente.");
-            return false;
-        }
+    public void sacar(double valor) {
+        if (valor <= 0) throw new IllegalArgumentException("Valor de saque deve ser positivo.");
+        if (valor > this.saldo) throw new SaldoInsuficienteException(numeroConta, valor);
         this.saldo -= valor;
-        System.out.printf("Saque de R$ %.2f realizado. Saldo atual: R$ %.2f%n", valor, saldo);
-        return true;
-    }
-
-    public void consultarSaldo() {
-        System.out.printf("Saldo atual da conta %d: R$ %.2f%n", numeroConta, saldo);
     }
 
     @Override

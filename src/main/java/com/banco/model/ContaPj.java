@@ -1,12 +1,15 @@
 package com.banco.model;
 
+import com.banco.exceptions.SaldoInsuficienteException;
+
 public class ContaPj extends Conta {
 
     private String cnpj;
     private String nomeEmpresa;
     private double limiteCredito;
 
-    public ContaPj(int numeroConta, String agencia, String senha, Cliente titular, String cnpj, String nomeEmpresa, double limiteCredito) {
+    public ContaPj(int numeroConta, String agencia, String senha, Cliente titular,
+                   String cnpj, String nomeEmpresa, double limiteCredito) {
         super(numeroConta, agencia, senha, titular);
         this.cnpj = cnpj;
         this.nomeEmpresa = nomeEmpresa;
@@ -22,20 +25,11 @@ public class ContaPj extends Conta {
     public double getLimiteCredito() { return limiteCredito; }
     public void setLimiteCredito(double limiteCredito) { this.limiteCredito = limiteCredito; }
 
-    // Sobrescreve sacar para usar o limite de crédito
     @Override
-    public boolean sacar(double valor) {
-        if (valor <= 0) {
-            System.out.println("Valor de saque inválido.");
-            return false;
-        }
-        if (valor > saldo + limiteCredito) {
-            System.out.println("Saldo e limite de crédito insuficientes.");
-            return false;
-        }
+    public void sacar(double valor) {
+        if (valor <= 0) throw new IllegalArgumentException("Valor de saque deve ser positivo.");
+        if (valor > saldo + limiteCredito) throw new SaldoInsuficienteException(getNumeroConta(), valor);
         saldo -= valor;
-        System.out.printf("Saque de R$ %.2f realizado. Saldo atual: R$ %.2f%n", valor, saldo);
-        return true;
     }
 
     @Override
