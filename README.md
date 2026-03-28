@@ -16,4 +16,4 @@ Projeto de sistema bancário em Java.
 ## Regras de contribuição
 - Nunca commite direto na `main`
 - Crie uma branch com o padrão: `feature/nome-da-tarefa`
-- Abra um Pull Request e aguarde a revisão do Igor
+- Abra um Pull Request e juntos fazemos a revisão
