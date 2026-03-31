@@ -14,6 +14,6 @@ Projeto de sistema bancário em Java.
 - `exception/` — erros customizados
 
 ## Regras de contribuição
-- Nunca commite direto na `main`
+- Nunca commite direto na `main`banco-vyva
 - Crie uma branch com o padrão: `feature/nome-da-tarefa`
 - Abra um Pull Request e juntos fazemos a revisão
