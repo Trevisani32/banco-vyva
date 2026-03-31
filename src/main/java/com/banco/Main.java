@@ -40,7 +40,7 @@ public class Main {
 
         System.out.println("\n=== SALDOS ===");
         contaService.consultarSaldo(1001);
-        contaService.consultarSaldo(2001);
+        contaService.consultarSaldo(2002);
 
         System.out.println("\n=== LISTAGENS ===");
         System.out.println("Clientes:");
